@@ -1,0 +1,11 @@
+﻿@using VisistorHouseMVC.Models;
+@model List<Product>;
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+@foreach (var item in Model)
+{
+    <p>@item.Name</p>
+    <p>@item.ProductAddress.City</p>
+}

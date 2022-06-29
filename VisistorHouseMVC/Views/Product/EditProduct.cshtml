@@ -1,0 +1,21 @@
+﻿@using VisistorHouseMVC.DTOs.ProductDto
+@model EditProductDto
+@{
+    ViewData["Title"] = "Edit product";
+}
+
+<form enctype="multipart/form-data" asp-action="EditProduct">
+    <label>Name</label>
+    <input type="text" asp-for="Name" value="@Model.Name">
+    <label>Description</label>
+    <input type="text" asp-for="Description" value="@Model.Description">
+    <label>Price</label>
+    <input type="number" asp-for="Price" value="@Model.Price">
+    <label>City</label>
+
+    <label asp-for="Files" >Product Image</label>
+    <input asp-for="Files">
+
+
+    <input type="submit" value="Edit" />
+</form>

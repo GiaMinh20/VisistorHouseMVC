@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisistorHouseMVC", "VisistorHouseMVC\VisistorHouseMVC.csproj", "{70092FC1-3CFC-4566-8CC0-9ED28FBBE1B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{70092FC1-3CFC-4566-8CC0-9ED28FBBE1B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70092FC1-3CFC-4566-8CC0-9ED28FBBE1B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70092FC1-3CFC-4566-8CC0-9ED28FBBE1B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70092FC1-3CFC-4566-8CC0-9ED28FBBE1B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4FC92A3-4E42-4F9E-889F-DA6515CEC0AF}
+	EndGlobalSection
+EndGlobal

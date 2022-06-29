@@ -1,0 +1,32 @@
+﻿@using VisistorHouseMVC.DTOs.ProductDto
+@model CreateProductDto
+@{
+    ViewData["Title"] = "Create product";
+}
+
+<form enctype="multipart/form-data" asp-action="CreateProduct">
+    <label>Name</label>
+    <input type="text" asp-for="Name">
+    <label>Description</label>
+    <input type="text" asp-for="Description">
+    <label>Price</label>
+    <input type="number" asp-for="Price">
+    <label>City</label>
+    <input type="text" asp-for="ProductAddress.City">
+    <label>District</label>
+    <input type="text" asp-for="ProductAddress.District">
+    <label>Sub-District</label>
+    <input type="text" asp-for="ProductAddress.SubDistrict">
+    <label>Street</label>
+    <input type="text" asp-for="ProductAddress.Street">
+    <label>Detail</label>
+    <input type="text" asp-for="ProductAddress.Details">
+    <label>Type</label>
+    <input type="text" asp-for="Type">
+
+    <label asp-for="Files" >Product Image</label>
+    <input asp-for="Files">
+
+
+    <input type="submit" value="Craete" />
+</form>

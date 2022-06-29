@@ -1,0 +1,107 @@
+﻿@using VisistorHouseMVC.DTOs.AccountDto;
+@using VisistorHouseMVC.Data.Static;
+@model EditProfileDto
+@{
+    ViewData["Title"] = "Edit your account";
+}
+<form enctype="multipart/form-data" asp-action="EditProfile">
+
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img style="width: 10em; height: 10em;" class="rounded-circle mt-5" src="@Model.AvatarUrl">
+                    <span class="font-weight-bold">@Model.Username</span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Chỉnh sửa thông tin cá nhân</h4>
+                    </div> <div class="row mt-2">
+                        <div class="col-md-12">
+                            <label class="labels">Họ và tên</label>
+                            <input asp-for="FullName" value="@Model.FullName" type="text" class="form-control" placeholder="Họ và tên">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Ngày sinh</label>
+                            <input type="date" asp-for="Dob" value="@Model.Dob" class="form-control" placeholder="Ngày sinh">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Số điện thoại</label>
+                            <input type="text" class="form-control" placeholder="Số điện thoại" value="@Model.PhoneNumber">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Giới tính</label>
+                            <select style=" font-size: 100%; " asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Ảnh đại diện</label>
+                            <input type="file" asp-for="Avatar" value="@Model.Avatar" class="form-control" placeholder="Ảnh đại diện">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Thành phố/Tỉnh</label>
+                            <input asp-for="Address.City" type="text" class="form-control" placeholder="Thành phố/Tỉnh" value="@Model.Address.City">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Quận/Thị xã/Huyện</label>
+                            <input asp-for="Address.District" type="text" class="form-control" placeholder="Quận/Thị xã/Huyện" value="@Model.Address.District"> 
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Phường/Xã</label>
+                            <input asp-for="Address.SubDistrict" type="text" class="form-control" placeholder="Phường/Xã" value="@Model.Address.SubDistrict" /> 
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Đường/Thôn</label>
+                            <input type="text" class="form-control" asp-for="Address.Street" placeholder="Đường/Thôn" value="@Model.Address.Street" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Chi tiết nơi ở</label>
+                            <input asp-for="Address.Details" type="text" class="form-control" placeholder="Chi tiết nơi ở" value="@Model.Address.Details"/> 
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="submit">Lưu chỉnh sửa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</form>
+
+@*<form enctype="multipart/form-data" asp-action="EditProfile">
+    <label>Full Name</label>
+    <input type="text" asp-for="Username" value="@Model.Username">
+    <label>BirthDay</label>
+    <input type="date" asp-for="Dob">
+    <label>Gender</label>
+    <input type="text" asp-for="Gender">
+    <label>City</label>
+    <input type="text" asp-for="Address.City">
+    <label>District</label>
+    <input type="text" asp-for="Address.District">
+    <label>Sub-District</label>
+    <input type="text" asp-for="Address.SubDistrict">
+    <label>Street</label>
+    <input type="text" asp-for="Address.Street">
+    <label>Detail</label>
+    <input type="text" asp-for="Address.Details">
+
+
+    <label asp-for="Avatar"></label>
+    <input asp-for="Avatar">
+    <input type="submit" value="Save Profile" />
+</form>*@

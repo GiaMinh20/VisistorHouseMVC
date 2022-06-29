@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VisistorHouseMVC</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css.map" rel="stylesheet">
+
+    <link href="~/css/carousel.css" rel="stylesheet">
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" asp-area="" asp-controller="Product" asp-action="Catalog">Tin tức</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Liên hệ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Hỗ trợ</a>
+                        </li>
+                    </ul>
+                </div>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <div class="d-flex">
+                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="SignIn">Đăng nhập</a>
+                        <a class="btn btn-primary mx-3" asp-controller="Account" asp-action="SignUp">Đăng ký</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex">
+                        <a class="btn btn-primary mx-1" asp-controller="Product" asp-action="CreateProduct">Đăng tin</a>
+                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile">Cá nhân</a>
+                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="SignOutUser">Đăng xuất</a>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        @RenderBody()
+        <!-- FOOTER -->
+        <footer class="container">
+            <p class="float-end"><a href="#">Back to top</a></p>
+            <p>&copy; 2022 - VisistorHouseMVC - <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+        </footer>
+    </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+</body>
+</html>
