@@ -1,32 +1,116 @@
 ﻿@using VisistorHouseMVC.DTOs.ProductDto
+@using VisistorHouseMVC.Data
+@inject StoreContext _context;
 @model CreateProductDto
 @{
-    ViewData["Title"] = "Create product";
+    ViewData["Title"] = "Đăng tin";
 }
+<style>
 
-<form enctype="multipart/form-data" asp-action="CreateProduct">
-    <label>Name</label>
-    <input type="text" asp-for="Name">
-    <label>Description</label>
-    <input type="text" asp-for="Description">
-    <label>Price</label>
-    <input type="number" asp-for="Price">
-    <label>City</label>
-    <input type="text" asp-for="ProductAddress.City">
-    <label>District</label>
-    <input type="text" asp-for="ProductAddress.District">
-    <label>Sub-District</label>
-    <input type="text" asp-for="ProductAddress.SubDistrict">
-    <label>Street</label>
-    <input type="text" asp-for="ProductAddress.Street">
-    <label>Detail</label>
-    <input type="text" asp-for="ProductAddress.Details">
-    <label>Type</label>
-    <input type="text" asp-for="Type">
+    #result {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 0;
+    }
 
-    <label asp-for="Files" >Product Image</label>
-    <input asp-for="Files">
+    .thumbnail {
+        height: 192px;
+    }
+</style>
+<form enctype="multipart/form-data" asp-action="CreateProduct" class="my-5">
 
+    <div class="container rounded bg-white my-5">
+        <div class="row">
+            <div class="col-md-3"></div>
 
-    <input type="submit" value="Craete" />
+@*            <div class="col-md-5">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Hình ảnh minh họa</h4>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <img src="~/images/addimage.png" id="image" width="500" height="500" />
+                        </div>
+                        <label for="files">Select multiple files</label>
+                        <input id="files" type="file" multiple="multiple" accept="image/jpeg, image/png, image/jpg">
+                        <output id="result" />
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-md-6">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Đăng tin</h4>
+                        <p class="text-danger"><i>@TempData["ErrorCreate"]</i></p>
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-8">
+                            <label class="labels">Tiêu đề</label>
+                            <input asp-for="Name" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="labels">Danh mục</label>
+                            <select style=" font-size: 100%; " asp-for="Type" class="form-control">
+                                @foreach (var item in _context.ProductTypes.ToList())
+                                {
+                                    <option value="@item.Name">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Mô tả</label>
+                            <textarea asp-for="Description" value="@Model.Description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Giá</label>
+                            <input type="number" min="0" step="100" class="form-control" asp-for="Price">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="labels">Hình ảnh</label>
+                            <input asp-for="Files" id="imageFile" onchange="chooseFile(this)" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Thành phố/Tỉnh</label>
+                            <input asp-for="ProductAddress.City" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Quận/Thị xã/Huyện</label>
+                            <input asp-for="ProductAddress.District" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Phường/Xã</label>
+                            <input asp-for="ProductAddress.SubDistrict" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Đường/Thôn</label>
+                            <input type="text" class="form-control" asp-for="ProductAddress.Street" />
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Chi tiết nơi ở</label>
+                            <input asp-for="ProductAddress.Details" type="text" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-3 text-start">
+                        <button class="btn btn-success profile-button px-5 py-2" type="submit">Đăng</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
 </form>
+

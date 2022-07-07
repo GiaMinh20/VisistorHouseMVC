@@ -1,7 +1,7 @@
 ﻿@using VisistorHouseMVC.DTOs.AccountDto;
 @model ProfileDto;
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Thông tin tài khoản";
 }
 
 <div class="container py-4">
@@ -14,7 +14,8 @@
                     <p>
                         <img style="width: 5em; height: 5em;" class="rounded-circle" src="@Model.User.AvatarUrl">
                     </p>
-                    <p>@Model.User.UserName</p>
+                    <span>@Model.User.UserName</span>
+                    <span><a asp-action="EditProfile" asp-controller="Account"><i class="fas fa-edit"></i></a></span>
                 </div>
                 <div class="py-1 d-flex align-items-center justify-content-between border-bottom">
                     <span>Facebook</span>
@@ -72,7 +73,9 @@
                                     <a style="text-decoration:none; color:black" class="card" asp-action="EditProduct" asp-controller="Product" asp-route-id="@item.Id">
                                         <img style="width: 14.2em; height: 10em;" src="@item.PictureUrl[0]" class="card-img-top" alt="@item.Name">
                                         <div class="card-body">
-                                            <p class="card-text">@item.Name</p>
+                                            <span class="card-text">@item.Name</span>
+                                            <span class="text-danger"><i>@item.ProductStatus.ToString()</i></span>
+                                            <p class="card-text">@item.ProductAddress.District @item.ProductAddress.City </p>
                                         </div>
                                     </a>
                                 </div>

@@ -8,17 +8,30 @@
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
     <link href="~/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/css/bootstrap.min.css.map" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link href="~/css/carousel.css" rel="stylesheet">
-
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function chooseFile(fileInput) {
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#image').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+    </script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                         aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -32,7 +45,7 @@
                             <a class="nav-link" href="#">Liên hệ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link">Hỗ trợ</a>
+                            <a class="nav-link">Hỗ trợ </a>
                         </li>
                     </ul>
                 </div>
@@ -46,8 +59,9 @@
                 else
                 {
                     <div class="d-flex">
+                        <a class="btn btn-primary mx-1" asp-controller="SavedNews" asp-action="Index" asp-route-name="@User.Identity.Name">Danh sách lưu</a>
                         <a class="btn btn-primary mx-1" asp-controller="Product" asp-action="CreateProduct">Đăng tin</a>
-                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile">Cá nhân</a>
+                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile" asp-route-name="@User.Identity.Name">Cá nhân</a>
                         <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="SignOutUser">Đăng xuất</a>
                     </div>
                 }
@@ -58,9 +72,11 @@
     <main>
         @RenderBody()
         <!-- FOOTER -->
-        <footer class="container">
-            <p class="float-end"><a href="#">Back to top</a></p>
-            <p>&copy; 2022 - VisistorHouseMVC - <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></p>
+        <footer class="d-flex flex-column align-items-center bg-dark py-5">
+            
+            <span>&copy; 2022 - VisistorHouseMVC </span>
+            <span>Trang web được phát triển bởi<a style="color:#929193" href="https://github.com/GiaMinh20"> GiaMinh</a></span>
+            @*<span><a href="#">Back to top</a></span>*@
         </footer>
     </main>
 

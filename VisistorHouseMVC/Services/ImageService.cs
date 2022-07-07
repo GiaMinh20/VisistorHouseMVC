@@ -33,6 +33,7 @@ namespace VisistorHouseMVC.Services
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
+                    //Transformation = new Transformation().Width(500).Height(300).Crop("scale")
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
             }

@@ -2,7 +2,7 @@
 @using VisistorHouseMVC.Data.Static;
 @model EditProfileDto
 @{
-    ViewData["Title"] = "Edit your account";
+    ViewData["Title"] = "Chỉnh sửa tài khoản";
 }
 <form enctype="multipart/form-data" asp-action="EditProfile">
 
@@ -81,27 +81,3 @@
         <div class="col-md-2"></div>
     </div>
 </form>
-
-@*<form enctype="multipart/form-data" asp-action="EditProfile">
-    <label>Full Name</label>
-    <input type="text" asp-for="Username" value="@Model.Username">
-    <label>BirthDay</label>
-    <input type="date" asp-for="Dob">
-    <label>Gender</label>
-    <input type="text" asp-for="Gender">
-    <label>City</label>
-    <input type="text" asp-for="Address.City">
-    <label>District</label>
-    <input type="text" asp-for="Address.District">
-    <label>Sub-District</label>
-    <input type="text" asp-for="Address.SubDistrict">
-    <label>Street</label>
-    <input type="text" asp-for="Address.Street">
-    <label>Detail</label>
-    <input type="text" asp-for="Address.Details">
-
-
-    <label asp-for="Avatar"></label>
-    <input asp-for="Avatar">
-    <input type="submit" value="Save Profile" />
-</form>*@

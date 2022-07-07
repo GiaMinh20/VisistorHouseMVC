@@ -1,0 +1,101 @@
+﻿@using System;
+@using VisistorHouseMVC.Data.Static;
+@model Product
+@{
+    ViewData["Title"] = "Xem tin";
+}
+<div class="container rounded bg-white my-5">
+    <div class="row" style="background-color:#eee">
+        @*        <div class="col-md-1"></div>
+        *@
+        <div class="col-md-6 border-end">
+            <div class="p-3 py-5">
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner ">
+                                @foreach (var item in @Model.PictureUrl)
+                                {
+                                    if (item == @Model.PictureUrl[0])
+                                    {
+                                        <div class="carousel-item active">
+                                            <img class="img-fluid rounded mx-auto d-block my-auto " src="@item" />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="carousel-item">
+                                            <img class="img-fluid rounded mx-auto d-block" src="@item" />
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="text-right">@Model.Name</h3>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <h5>Mô tả</h5>
+                    </div>
+                    <div class="col-md-10">
+                        <p>@Model.Description</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <h5>Giá:</h5>
+                    </div>
+                    <div class="col-md-10">
+                        <p class="text-warning"><strong><i>@Model.Price VNĐ</i></strong></p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <h6>Danh mục:</h6>
+                    </div>
+                    <div class="col-md-10">
+                        <p>@Model.ProductType.Name</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <h6>Địa chỉ:</h6>
+                    </div>
+                    <div class="col-md-10">
+                        <p>@Model.ProductAddress.SumAddress()</p>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <h6>Liên hệ:</h6>
+                    </div>
+                    <div class="col-md-10">
+                        <p>@Model.User.FullName</p>
+                        <p>@Model.User.Email</p>
+                        <p>@Model.User.PhoneNumber</p>
+                    </div>
+                </div>
+                <div class="action">
+                    <a asp-controller="SavedNews"
+                       asp-action="AddItemToList" asp-route-id="@Model.Id" class="add-to-cart btn btn-outline-success">Lưu vào danh sách</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

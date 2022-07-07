@@ -17,5 +17,6 @@ namespace VisistorHouseMVC.DTOs.AccountDto
                 User.UserAddress.District + " " +
                 User.UserAddress.City;
         }
+
     }
 }

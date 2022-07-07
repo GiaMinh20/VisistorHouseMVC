@@ -2,7 +2,7 @@
 {
     public enum ProductStatus
     {
-        Active,
-        UnActive
+        Chưa_thuê,
+        Đã_thuê
     }
 }

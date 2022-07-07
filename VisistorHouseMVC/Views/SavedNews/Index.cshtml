@@ -1,0 +1,55 @@
+﻿@model SavedNews
+
+<h1>@TempData["ErrorSave"]</h1>
+
+@foreach (var item in @Model.Products)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <table class="table table-hover ">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th ></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td >
+                                <div class="media border-end">
+                                    <a class="thumbnail pull-left" href="#"> <img class="media-object" src="@item.PictureUrl[0]" style="width: 10em"> </a>
+
+                                </div>
+                            </td>
+                            <td class="col-md-5">
+                                <div class="media-body">
+                                    <h4 class="media-heading">@item.Name</h4>
+                                    <h6 class="media-heading"> by <a asp-controller="Account" asp-action="Profile" asp-route-name="@item.User.UserName">@item.User.FullName</a></h6>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-md-2 pt-5"><strong>@item.Price VND</strong></td>
+                            <td class="col-md-2 pt-5"><a href="#">Facebook</a></td>
+                            <td class="col-md-2 pt-5"><a href="#">Zalo</a></td>
+                            <td class="col-sm-1 col-md-2 pt-5">
+                                <a asp-controller="SavedNews" asp-action="DeleteItemFromList" asp-route-id="@item.Id" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span> Xóa
+                                </a>
+                            </td>
+                            <td class="col-sm-1 col-md-2 pt-5">
+                                <a asp-controller="SavedNews" asp-action="RentNews" asp-route-id="@item.Id" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-remove"></span> Thuê
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+}

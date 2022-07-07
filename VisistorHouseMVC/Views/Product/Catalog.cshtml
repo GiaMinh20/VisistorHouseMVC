@@ -1,11 +1,130 @@
-﻿@using VisistorHouseMVC.Models;
+﻿@using VisistorHouseMVC.Data
+@using VisistorHouseMVC.Helpers
+@using VisistorHouseMVC.Models;
+
+@inject StoreContext _context;
 @model List<Product>;
 @{
-    ViewData["Title"] = "Catalog";
+    ViewData["Title"] = "Tin tức";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
 }
+<div class="album py-5 bg-light">
+    <div class="row ">
+        <div class="col-md-1"></div>
+        <div class="col-md-2">
+            <form class="d-flex" role="search" asp-action="Catalog" method="get">
+                <input value="@ViewData["CurrentFilter"]" name="SearchString" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                @*<button class="btn btn-outline-success" type="submit">Search</button>*@
+                <input type="submit" value="Search" class="btn bbtn-outline-success" />
+            </form>
+            <div class="list-group pt-5">
+                <div class="list-group-item list-group-item-action active" aria-current="true">
+                    Sắp xếp
+                </div>
 
-@foreach (var item in Model)
-{
-    <p>@item.Name</p>
-    <p>@item.ProductAddress.City</p>
-}
+                <a class="list-group-item list-group-item-action"
+                   asp-action="Catalog"
+                   asp-route-sort="lowest"
+                   asp-route-type="@ViewData["type"]"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Giá thấp đến cao
+                </a>
+
+                <a class="list-group-item list-group-item-action"
+                   asp-action="Catalog"
+                   asp-route-sort="highest"
+                   asp-route-type="@ViewData["type"]"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Giá cao đến thấp
+                </a>
+
+                <a class="list-group-item list-group-item-action"
+                   asp-action="Catalog"
+                   asp-route-sort="az"
+                   asp-route-type="@ViewData["type"]"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    A đến Z
+                </a>
+
+                <a class="list-group-item list-group-item-action"
+                   asp-action="Catalog"
+                   asp-route-sort="za"
+                   asp-route-type="@ViewData["type"]"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Z đến A
+                </a>
+            </div>
+
+            <div class="list-group pt-5">
+                <div class="list-group-item list-group-item-action active" aria-current="true">
+                    Danh mục
+                </div>
+                @foreach (var item in _context.ProductTypes.ToList())
+                {
+                    <a class="list-group-item list-group-item-action"
+                   asp-action="Catalog"
+                   asp-route-sort="@ViewData["sort"]"
+                   asp-route-type="@item.Name"
+                   asp-route-searchString="@ViewData["searchString"]">
+                        @item.Name
+                    </a>
+                }
+            </div>
+            <div class="list-group pt-5">
+                <a asp-action="Catalog" class="list-group-item list-group-item-action list-group-item-danger">Xóa bộ lọc</a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <img src="@item.PictureUrl[0]" />
+                                <div class="card-body">
+                                    <p class="card-text">@item.Name</p>
+                                    <p class="card-text">@item.Price</p>
+                                    <p class="card-text">@item.ProductAddress.District @item.ProductAddress.City</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <a asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Xem</a>
+                                            <a asp-controller="SavedNews"
+                                                asp-action="AddItemToList" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">Lưu lại</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <nav class="pt-2">
+                    @if (pager.TotalPages > 0)
+                    {
+                        <ul class="pagination justify-content-center">
+                            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                            {
+                                <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                                    <a class="page-link"
+                               asp-controller="Product"
+                               asp-action="Catalog"
+                               asp-route-sort="@ViewData["sort"]"
+                               asp-route-type="@ViewData["type"]"
+                               asp-route-searchString="@ViewData["searchString"]"
+                               asp-route-pg="@pge"> @pge </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>

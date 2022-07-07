@@ -53,7 +53,7 @@ namespace VisistorHouseMVC.Controllers.Account
                     var result = await _signInManager.PasswordSignInAsync(user, signInDto.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Profile", "Account");
+                        return RedirectToAction("Catalog", "Product");
                         //if (userRole[0] == UserRoles.Admin)
                         //{
                         //    return Redirect("https://member5.smarterasp.net/cp/cp_screen");
@@ -158,14 +158,19 @@ namespace VisistorHouseMVC.Controllers.Account
 
         //Account Information Page
         [Authorize(Roles = "Member")]
-        public async Task<IActionResult> Profile()
+        public async Task<IActionResult> Profile(string name)
         {
             var user = await _context.Users
                     .Include(a => a.UserAddress)
-                    .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+                    .FirstOrDefaultAsync(x => x.UserName == name);
 
             if (user == null) return NotFound();
-            var products = await _context.Products.Where(p=>p.User.Id == user.Id).ToListAsync();
+            var products = await _context.Products
+                .Include(p => p.ProductAddress)
+                .Include(p => p.ProductType)
+                .Include(p => p.User)
+                .Where(p=>p.User.Id == user.Id)
+                .ToListAsync();
             ProfileDto profile = new ProfileDto
             {
                 User = user,
@@ -224,8 +229,7 @@ namespace VisistorHouseMVC.Controllers.Account
                     user.PublicId = imageResult.PublicId;
 
                 }
-                else user.AvatarUrl = user.AvatarUrl;
-
+                
                 user.FullName = editProfileDto.FullName;
                 user.Gender = editProfileDto.Gender;
                 user.Dob=editProfileDto.Dob;

@@ -80,7 +80,12 @@ namespace VisistorHouseMVC
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            });
+            }).AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                facebookOptions.CallbackPath = "/signin-facebook";
+            }); ;
             services.AddScoped<EmailService>();
             services.AddScoped<ImageService>();
 
@@ -116,11 +121,15 @@ namespace VisistorHouseMVC
             {
                 //Product Controller
                 endpoints.MapControllerRoute(
+                     name: "view-product/{id?}",
+                     defaults: new { controller = "Product", action = "ViewProduct" },
+                     pattern: "view-product/{id?}");
+                endpoints.MapControllerRoute(
                      name: "edit-product/{id?}",
                      defaults: new { controller = "Product", action = "EditProduct" },
                      pattern: "edit-product/{id?}");
                 endpoints.MapControllerRoute(
-                     name: "create-product/{id?}",
+                     name: "create-product",
                      defaults: new { controller = "Product", action = "CreateProduct" },
                      pattern: "create-product");
                 endpoints.MapControllerRoute(
@@ -137,7 +146,7 @@ namespace VisistorHouseMVC
                      defaults: new { controller = "Account", action = "Profile" },
                      pattern: "profile");
                 endpoints.MapControllerRoute(
-                     name: "signin",    
+                     name: "signin",
                      defaults: new { controller = "Account", action = "SignIn" },
                      pattern: "signin");
 
