@@ -22,8 +22,7 @@
                         <tr>
                             <td >
                                 <div class="media border-end">
-                                    <a class="thumbnail pull-left" href="#"> <img class="media-object" src="@item.PictureUrl[0]" style="width: 10em"> </a>
-
+                                    <a class="thumbnail pull-left" asp-controller="Product" asp-action="ViewProduct" asp-route-id="@item.Id"> <img class="media-object" src="@item.PictureUrl[0]" style="width: 10em"> </a>
                                 </div>
                             </td>
                             <td class="col-md-5">

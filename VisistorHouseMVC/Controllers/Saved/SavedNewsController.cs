@@ -7,16 +7,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using VisistorHouseMVC.Data;
 using VisistorHouseMVC.Data.Static;
+using VisistorHouseMVC.DTOs.RentDto;
 using VisistorHouseMVC.Models;
+using VisistorHouseMVC.Services;
 
 namespace VisistorHouseMVC.Controllers.Saved
 {
     public class SavedNewsController : Controller
     {
         private readonly StoreContext _context;
-        public SavedNewsController(StoreContext store)
+        private readonly EmailService _emailService;
+
+        public SavedNewsController(StoreContext store,
+            EmailService emailService)
         {
             _context = store;
+            _emailService = emailService;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -43,7 +49,7 @@ namespace VisistorHouseMVC.Controllers.Saved
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) return BadRequest(new ProblemDetails { Title = "Không tìm thấy tin" });
 
-            
+
             var savedList = await _context.SavedNews
                 .Include(s => s.User)
                 .Include(s => s.Products)
@@ -79,7 +85,7 @@ namespace VisistorHouseMVC.Controllers.Saved
                 .FirstOrDefaultAsync();
 
             var saveNews = await _context.SavedNews.Include(s => s.Products).FirstOrDefaultAsync(s => s.User.Id == user.Id);
-            
+
             saveNews.Products.Remove(product);
             _context.SavedNews.Update(saveNews);
 
@@ -94,24 +100,76 @@ namespace VisistorHouseMVC.Controllers.Saved
             return RedirectToAction("Index", "SavedNews");
         }
 
+        [Authorize]
         public async Task<IActionResult> RentNews(string id)
         {
-            await DeleteItemFromList(id);
             var product = await _context.Products
                 .Include(p => p.ProductAddress)
                 .Include(p => p.ProductType)
+                .Include(p => p.User)
                 .Where(p => p.Id == id)
                 .FirstOrDefaultAsync();
+            var user = await _context.Users
+                .Include(u => u.UserAddress)
+                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+            var rentInforDto = new RentInforDto
+            {
+                Product = product,
+                User = user
+            };
+            return View(rentInforDto);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> RentNews(RentInforDto rentInforDto)
+        {
+            await DeleteItemFromList(rentInforDto.Product.Id);
+            var product = await _context.Products
+                .Include(p => p.ProductAddress)
+                .Include(p => p.ProductType)
+                .Include(p=>p.User)
+                .Where(p => p.Id == rentInforDto.Product.Id)
+                .FirstOrDefaultAsync();
+            rentInforDto.Product.ProductAddress = product.ProductAddress;
+
             product.ProductStatus = ProductStatus.Đã_thuê;
             _context.Products.Update(product);
             var result = await _context.SaveChangesAsync() > 0;
-            if (!result)
-            {
-                return RedirectToAction("Index", "SavedNews");
 
+            if (result)
+            {
+                await _emailService.SendEmailAsync(rentInforDto.Product.User.Email,
+                "Tin đã được thuê", $"<html><body>" +
+                $"<p>Chào {rentInforDto.Product.User.FullName},</p>" +
+                $"<p>Tin <strong>{rentInforDto.Product.Name}</strong> của bạn đã được xác nhận thuê bởi <strong>{rentInforDto.User.FullName}</strong></p>" +
+                "<p>Thông tin liên lạc với người thuê:</p>" +
+                $"<p>Email: {rentInforDto.User.Email} </p>" +
+                $"<p>Số điện thoại: {rentInforDto.User.PhoneNumber} </p>" +
+                "<p><i>VisistorHouseMVC</i></p>" +
+                $"</body></html>");
+
+                await _emailService.SendEmailAsync(rentInforDto.User.Email,
+                "Xác nhận tin đã thuê", $"<html><body>" +
+                $"<p>Chào {rentInforDto.User.FullName},</p>" +
+                "<p>Bạn đã thuê tin tức có thông tin như sau:</p>" +
+                $"<p>Tiêu đề: {rentInforDto.Product.Name} </p>" +
+                $"<p>Địa chỉ: {rentInforDto.Product.ProductAddress.SumAddress()} </p>" +
+                $"<p>Người đăng tin: {rentInforDto.Product.User.FullName} </p>" +
+                $"<p>Email: {rentInforDto.Product.User.Email} </p>" +
+                $"<p>Số điện thoại:{rentInforDto.Product.User.PhoneNumber} </p>" +
+                "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi," +
+                "<p><i>VisistorHouseMVC</i></p>" +
+                $"</body></html>");
+
+                return RedirectToAction("Completed", "SavedNews");
             }
             return RedirectToAction("Index", "SavedNews");
+
         }
+
+        public IActionResult Completed() => View();
+
         private SavedNews CreateSavedList(Product product, User user)
         {
 

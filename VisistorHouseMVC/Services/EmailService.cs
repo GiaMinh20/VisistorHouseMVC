@@ -48,7 +48,7 @@ namespace VisistorHouseMVC.Services
                 "From",
                    new JObject {
                        {"Email", "goodhabittracker@gmail.com"},
-                       {"Name", "GoodHabit"}
+                       {"Name", "VisistorHouseMVC"}
                    }
             },
             {

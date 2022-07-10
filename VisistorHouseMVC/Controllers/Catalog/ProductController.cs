@@ -199,7 +199,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
                 return RedirectToAction("EditProduct", "Product");
 
             }
-            return RedirectToAction("Profile", "Account");
+            return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
 
         }
 
