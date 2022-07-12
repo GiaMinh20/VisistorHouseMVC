@@ -1,0 +1,204 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using VisistorHouseMVC.DTOs.AdminDto
+@using VisistorHouseMVC.Data
+@using VisistorHouseMVC.Data.Static
+@using VisistorHouseMVC.Helpers
+@model IndexDto
+@inject StoreContext _context;
+@inject UserManager<User> _userManager;
+@{
+    ViewData["Title"] = "Admin";
+
+    Pager userPager = new Pager();
+    int userPageNo = 0;
+    if (ViewBag.UserPager != null)
+    {
+        userPager = ViewBag.UserPager;
+        userPageNo = userPager.CurrentPage;
+    }
+
+    Pager productPager = new Pager();
+    int productPageNo = 0;
+    if (ViewBag.ProductPager != null)
+    {
+        productPager = ViewBag.ProductPager;
+        productPageNo = productPager.CurrentPage;
+    }
+
+    Pager productUserPager = new Pager();
+    int productUserPageNo = 0;
+    if (ViewBag.ProductUserPager != null)
+    {
+        productUserPager = ViewBag.ProductUserPager;
+        productUserPageNo = productUserPager.CurrentPage;
+    }
+}
+<div class="container rounded bg-white my-5">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <table class="table caption-top">
+                <caption>Danh sách người dùng <strong>(@Model.Users.Count())</strong></caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Tên người dùng</th>
+                        <th scope="col">Vai trò người dùng</th>
+                        <th><strong class="text-danger">Chuyển thành admin</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.Users)
+                    {
+                        <tr>
+                            <td>@item.UserName</td>
+                            <td>
+                                @{
+                                    var role = await _userManager.GetRolesAsync(item);
+                                }
+                                @role[0]
+                            </td>
+                            <td>
+                                @if (role[0] == UserRoles.Member)
+                                {
+                                    <a asp-controller="Admin" asp-action="ChangeRole" asp-route-id="@item.Id" class="btn btn-danger ">Đổi</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <nav class="pt-2">
+                @if (userPager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-center">
+                        @for (var pge = userPager.StartPage; pge <= userPager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == userPager.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                           asp-controller="Admin"
+                           asp-action="Index"
+                           asp-route-pg1="@pge"> @pge </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </nav>
+        </div>
+        <div class="col-md-6">
+            <table class="table caption-top">
+                <caption>Danh sách tin <strong>(@Model.Products.Count())</strong></caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Tiêu đề</th>
+                        <th scope="col">Danh mục</th>
+                        <th scope="col">Giá</th>
+                        <th scope="col">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.Products)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.ProductType.Name</td>
+                            <td>@item.Price VNĐ</td>
+                            <td>@item.ProductStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <nav class="pt-2">
+                @if (productPager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-center">
+                        @for (var pge = productPager.StartPage; pge <= productPager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == productPager.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                           asp-controller="Admin"
+                           asp-action="Index"
+                           asp-route-pg2="@pge"> @pge </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </nav>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <table class="table caption-top">
+                <caption>Danh sách danh mục <strong>(@Model.ProductTypes.Count())</strong></caption>
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.ProductTypes)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <th>
+                                @{
+                                    var productInTypes = await _context.Products.Where(p => p.ProductType.Id == item.Id).ToListAsync();
+                                }
+                                @productInTypes.Count()
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <table class="table caption-top">
+                <caption>Thống kê tin tức </caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Người dùng</th>
+                        <th scope="col">Số bài viết đã đăng</th>
+                        <th scope="col">Số bài đã được thuê</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.ProductOfUserDtos)
+                    {
+                        <tr>
+                            <td>@item.UserName</td>
+                            <th>
+                                @item.Products.Count()
+                            </th>
+                            <th>
+                                @{
+                                    var productRentedOfUser = @item.Products.Where(p => p.ProductStatus == ProductStatus.Đã_thuê).ToList();
+                                }
+                                @productRentedOfUser.Count()
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <nav class="pt-2">
+                @if (productUserPager.TotalPages > 0)
+                {
+                    <ul class="pagination justify-content-center">
+                        @for (var pge = productUserPager.StartPage; pge <= productUserPager.EndPage; pge++)
+                        {
+                            <li class="page-item @(pge == productUserPager.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                           asp-controller="Admin"
+                           asp-action="Index"
+                           asp-route-pg3="@pge"> @pge </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </nav>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>

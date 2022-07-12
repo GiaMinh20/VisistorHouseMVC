@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
     <link href="~/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/css/bootstrap.min.css.map" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link href="~/css/carousel.css" rel="stylesheet">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
@@ -30,6 +29,7 @@
     <header>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
+
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MVC</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
@@ -58,12 +58,27 @@
                 }
                 else
                 {
+                    @using Microsoft.AspNetCore.Identity
+                    @using VisistorHouseMVC.Data.Static
+                    @inject UserManager<User> _userManager;
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    var userRole = await _userManager.GetRolesAsync(user);
                     <div class="d-flex">
-                        <a class="btn btn-primary mx-1" asp-controller="SavedNews" asp-action="Index" asp-route-name="@User.Identity.Name">Danh sách lưu</a>
-                        <a class="btn btn-primary mx-1" asp-controller="Product" asp-action="CreateProduct">Đăng tin</a>
-                        <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile" asp-route-name="@User.Identity.Name">Cá nhân</a>
+
+                        @if (userRole[0] == UserRoles.Admin)
+                        {
+                            <a class="btn btn-primary mx-1" asp-controller="Admin" asp-action="Index">Admin</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary mx-1" asp-controller="SavedNews" asp-action="Index" asp-route-name="@User.Identity.Name">Danh sách lưu</a>
+                            <a class="btn btn-primary mx-1" asp-controller="Product" asp-action="CreateProduct">Đăng tin</a>
+                            <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile" asp-route-name="@User.Identity.Name">Cá nhân</a>
+                        }
                         <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="SignOutUser">Đăng xuất</a>
+
                     </div>
+
                 }
             </div>
         </nav>
@@ -73,7 +88,7 @@
         @RenderBody()
         <!-- FOOTER -->
         <footer class="d-flex flex-column align-items-center bg-dark py-5">
-            
+
             <span>&copy; 2022 - VisistorHouseMVC </span>
             <span>Trang web được phát triển bởi<a style="color:#929193" href="https://github.com/GiaMinh20"> GiaMinh</a></span>
             @*<span><a href="#">Back to top</a></span>*@
@@ -81,7 +96,6 @@
     </main>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
 

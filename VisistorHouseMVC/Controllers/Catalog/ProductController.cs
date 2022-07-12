@@ -79,7 +79,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
                     p.ProductAddress.Details.Contains(searchString))
                     .ToList();
             }
-            const int pageSize = 6;
+            const int pageSize = 2;
             if (pg < 1) pg = 1;
 
             int recsCount = products.Count();

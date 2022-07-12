@@ -44,24 +44,24 @@ namespace VisistorHouseMVC.Controllers.Account
 
             var user = await _userManager.FindByNameAsync(signInDto.Username);
 
-            var userRole = await _userManager.GetRolesAsync(user);
             if (user != null)
             {
+                var userRole = await _userManager.GetRolesAsync(user);
+
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, signInDto.Password);
                 if (passwordCheck)
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, signInDto.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Catalog", "Product");
-                        //if (userRole[0] == UserRoles.Admin)
-                        //{
-                        //    return Redirect("https://member5.smarterasp.net/cp/cp_screen");
-                        //}
-                        //else
-                        //{
-                        //    return RedirectToAction("Index", "Habit");
-                        //}
+                        if (userRole[0] == UserRoles.Admin)
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Catalog", "Product");
+                        }
                     }
                 }
             }
