@@ -38,13 +38,51 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-4">
-            <table class="table caption-top">
-                <caption>Danh sách người dùng <strong>(@Model.Users.Count())</strong></caption>
+            <table class="table caption-top border">
+                <caption>
+                    Danh sách người dùng <strong>(@Model.Users.Count())</strong>
+                    <br />
+                    <form class="mt-1" role="search" asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <input value="@ViewData["searchUser"]" name="searchUser" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" value="Tìm" class="btn btn-success">Tìm</button>
+                            </div>
+                            <div class="col-md-2">
+                                <a asp-action="Index" class="btn btn-primary">Hủy</a>
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                    </form>
+                </caption>
                 <thead>
                     <tr>
-                        <th scope="col">Tên người dùng</th>
-                        <th scope="col">Vai trò người dùng</th>
-                        <th><strong class="text-danger">Chuyển thành admin</strong></th>
+
+                        <th scope="col">
+                            @if (ViewData["sortUser"] == null || ViewData["sortUser"].ToString() == "za")
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortUser="az"
+                               asp-route-searchUser="@ViewData["searchUser"]">
+                                    Người dùng
+                                </a>
+                            }
+                            else
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortUser="za"
+                               asp-route-searchUser="@ViewData["searchUser"]">
+                                    Người dùng
+                                </a>
+                            }
+                        </th>
+                        <th scope="col">Vai trò</th>
+                        <th><strong class="text-danger">Thành admin</strong></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,16 +106,19 @@
                     }
                 </tbody>
             </table>
-            <nav class="pt-2">
+            <nav>
                 @if (userPager.TotalPages > 0)
                 {
-                    <ul class="pagination justify-content-center">
+                    <ul class="pagination justify-content-end">
                         @for (var pge = userPager.StartPage; pge <= userPager.EndPage; pge++)
                         {
                             <li class="page-item @(pge == userPager.CurrentPage ? "active" : "")">
                                 <a class="page-link"
                            asp-controller="Admin"
                            asp-action="Index"
+                           asp-route-sortUser="@ViewData["sortUser"]"
+                           asp-route-searchUser="@ViewData["searchUser"]"
+                           asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]"
                            asp-route-pg1="@pge"> @pge </a>
                             </li>
                         }
@@ -85,57 +126,115 @@
                 }
             </nav>
         </div>
-        <div class="col-md-6">
-            <table class="table caption-top">
-                <caption>Danh sách tin <strong>(@Model.Products.Count())</strong></caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Tiêu đề</th>
-                        <th scope="col">Danh mục</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in @Model.Products)
-                    {
-                        <tr>
-                            <td>@item.Name</td>
-                            <td>@item.ProductType.Name</td>
-                            <td>@item.Price VNĐ</td>
-                            <td>@item.ProductStatus</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-            <nav class="pt-2">
-                @if (productPager.TotalPages > 0)
-                {
-                    <ul class="pagination justify-content-center">
-                        @for (var pge = productPager.StartPage; pge <= productPager.EndPage; pge++)
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-md-10">
+                    <table class="table caption-top border">
+                        <caption>
+                            Danh sách tin <strong>(@Model.Products.Count())</strong>
+                        </caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">Tiêu đề</th>
+                                <th scope="col">Danh mục</th>
+                                <th scope="col">
+                                    @if (ViewData["sortPrice"] == null || ViewData["sortPrice"].ToString() == "asc")
+                                    {
+                                        <a class=""
+                                       asp-action="Index"
+                                       asp-route-sortPrice="desc"
+                                       asp-route-productStatus="@ViewData["productStatus"]"
+                                       asp-route-productType="@ViewData["productType"]">
+                                            Giá
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class=""
+                                       asp-action="Index"
+                                       asp-route-sortPrice="asc"
+                                       asp-route-productStatus="@ViewData["productStatus"]"
+                                       asp-route-productType="@ViewData["productType"]">
+                                            Giá
+                                        </a>
+                                    }
+
+                                </th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in @Model.Products)
+                            {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.ProductType.Name</td>
+                                    <td>@item.Price VNĐ</td>
+                                    <td>@item.ProductStatus</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <nav>
+                        @if (productPager.TotalPages > 0)
                         {
-                            <li class="page-item @(pge == productPager.CurrentPage ? "active" : "")">
-                                <a class="page-link"
-                           asp-controller="Admin"
-                           asp-action="Index"
-                           asp-route-pg2="@pge"> @pge </a>
-                            </li>
+                            <ul class="pagination justify-content-end">
+                                @for (var pge = productPager.StartPage; pge <= productPager.EndPage; pge++)
+                                {
+                                    <li class="page-item @(pge == productPager.CurrentPage ? "active" : "")">
+                                        <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-sortPrice="@ViewData["sortPrice"]"
+                                   asp-route-productStatus="@ViewData["productStatus"]"
+                                   asp-route-productType="@ViewData["productType"]"
+                                   asp-route-pg2="@pge"> @pge </a>
+                                    </li>
+                                }
+                            </ul>
                         }
-                    </ul>
-                }
-            </nav>
+                    </nav>
+                </div>
+                <div class="col-md-2">
+                    <div class="list-group">
+                        <div class="list-group-item list-group-item-action active" aria-current="true">
+                            Lọc tin
+                        </div>
+                        @foreach (var item in _context.ProductTypes.ToList())
+                        {
+                            <a class="list-group-item list-group-item-action"
+                           asp-action="Index"
+                           asp-route-productStatus="@ViewData["productStatus"]"
+                           asp-route-productType="@item.Name">
+                                @item.Name
+                            </a>
+                        }
+                        @foreach (var item in Enum.GetValues(typeof(ProductStatus)).Cast<ProductStatus>().ToList())
+                        {
+                            <a class="list-group-item list-group-item-action"
+                           asp-action="Index"
+                           asp-route-productType="@ViewData["productType"]"
+                           asp-route-productStatus="@item.ToString()">
+                                @item.ToString()
+                            </a>
+                        }
+                    </div>
+                    <div class="list-group">
+                        <a asp-action="Index" class="list-group-item list-group-item-action list-group-item-danger">Xóa</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-1"></div>
     </div>
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-4">
-            <table class="table caption-top">
+            <table class="table caption-top border">
                 <caption>Danh sách danh mục <strong>(@Model.ProductTypes.Count())</strong></caption>
                 <thead>
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col"></th>
+                        <th scope="col">Danh mục</th>
+                        <th scope="col">Số lượng tin</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,15 +252,103 @@
                     }
                 </tbody>
             </table>
+            <div>
+                <form asp-action="CreateProductType">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input asp-for="ProductInTypeDto.Name" type="text" class="form-control me-2" />
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-success profile-button" type="submit">Tạo mới</button>
+                        </div>
+                    </div>
+                    <p><i class="text-danger">@TempData["FailedCreateProductType"]</i></p>
+                </form>
+            </div>
         </div>
         <div class="col-md-6">
-            <table class="table caption-top">
-                <caption>Thống kê tin tức </caption>
+            <table class="table caption-top border">
+                <caption>
+                    Thống kê tin tức
+                    <br />
+                    <form class="mt-1" role="search" asp-action="Index" method="get">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <input value="@ViewData["searchProductOfUser"]" name="searchProductOfUser" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" value="Tìm" class="btn btn-success">Tìm</button>
+                            </div>
+                            <div class="col-md-2">
+                                <a asp-action="Index" class="btn btn-primary">Hủy</a>
+                            </div>
+                            <div class="col-md-1">
+                            </div>
+                        </div>
+                    </form>
+                </caption>
                 <thead>
                     <tr>
-                        <th scope="col">Người dùng</th>
-                        <th scope="col">Số bài viết đã đăng</th>
-                        <th scope="col">Số bài đã được thuê</th>
+                        <th scope="col">
+                            @if (ViewData["sortUserOfProduct"] == null || ViewData["sortUserOfProduct"].ToString() == "za")
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortUserOfProduct="az"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Người dùng
+                                </a>
+                            }
+                            else
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortUserOfProduct="za"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Người dùng
+                                </a>
+                            }
+                        </th>
+                        <th scope="col">
+                            @if (ViewData["sortProductCount"] == null || ViewData["sortProductCount"].ToString() == "asc")
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortProductCount="desc"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Số bài viết đã đăng
+                                </a>
+                            }
+                            else
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortProductCount="asc"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Số bài viết đã đăng
+                                </a>
+                            }
+                        </th>
+                        <th scope="col">
+                            @if (ViewData["sortProductRented"] == null || ViewData["sortProductRented"].ToString() == "asc")
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortProductRented="desc"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Số bài đã được thuê
+                                </a>
+                            }
+                            else
+                            {
+                                <a class=""
+                               asp-action="Index"
+                               asp-route-sortProductRented="asc"
+                               asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]">
+                                    Số bài đã được thuê
+                                </a>
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -170,28 +357,28 @@
                         <tr>
                             <td>@item.UserName</td>
                             <th>
-                                @item.Products.Count()
+                                @item.ProductCount
                             </th>
                             <th>
-                                @{
-                                    var productRentedOfUser = @item.Products.Where(p => p.ProductStatus == ProductStatus.Đã_thuê).ToList();
-                                }
-                                @productRentedOfUser.Count()
+
+                                @item.RentedProducts
                             </th>
                         </tr>
                     }
                 </tbody>
             </table>
-            <nav class="pt-2">
+            <nav>
                 @if (productUserPager.TotalPages > 0)
                 {
-                    <ul class="pagination justify-content-center">
+                    <ul class="pagination justify-content-end">
                         @for (var pge = productUserPager.StartPage; pge <= productUserPager.EndPage; pge++)
                         {
                             <li class="page-item @(pge == productUserPager.CurrentPage ? "active" : "")">
                                 <a class="page-link"
                            asp-controller="Admin"
                            asp-action="Index"
+                           asp-route-sortUserOfProduct="@ViewData["sortUserOfProduct"]"
+                           asp-route-searchProductOfUser="@ViewData["searchProductOfUser"]"
                            asp-route-pg3="@pge"> @pge </a>
                             </li>
                         }
@@ -201,4 +388,11 @@
         </div>
         <div class="col-md-1"></div>
     </div>
+    @*    <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-6"></div>
+    <div class="col-md-1"></div>
+    </div>*@
 </div>

@@ -24,7 +24,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             _context = store;
             _emailService = emailService;
         }
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> Index()
         {
             var user = await _context.Users
@@ -36,6 +36,22 @@ namespace VisistorHouseMVC.Controllers.Saved
                 .Where(s => s.Id == user.Id)
                 .FirstOrDefaultAsync();
             if (news == null) return NotFound();
+
+            for (int i = 0; i < news.Products.Count(); i++)
+            {
+                if (news.Products[i].ProductStatus == ProductStatus.Đã_thuê)
+                {
+                    await DeleteItemFromList(news.Products[i].Id);
+                }
+                else
+                {
+                    var x = await _context.Products
+                        .Include(p => p.User)
+                        .FirstOrDefaultAsync(p => p.Id == news.Products[i].Id);
+                    news.Products[i].User = x.User;
+                }
+            }
+
             return View(news);
         }
 
@@ -46,6 +62,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             if (user == null) return RedirectToAction("SignIn", "Account");
 
             var product = await _context.Products
+                .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) return BadRequest(new ProblemDetails { Title = "Không tìm thấy tin" });
 
@@ -72,7 +89,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             return RedirectToAction("Index", "SavedNews");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> DeleteItemFromList(string id)
         {
             var user = await _context.Users
@@ -100,7 +117,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             return RedirectToAction("Index", "SavedNews");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public async Task<IActionResult> RentNews(string id)
         {
             var product = await _context.Products
@@ -109,9 +126,11 @@ namespace VisistorHouseMVC.Controllers.Saved
                 .Include(p => p.User)
                 .Where(p => p.Id == id)
                 .FirstOrDefaultAsync();
+
             var user = await _context.Users
                 .Include(u => u.UserAddress)
                 .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+
             var rentInforDto = new RentInforDto
             {
                 Product = product,
@@ -120,7 +139,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             return View(rentInforDto);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         [HttpPost]
         public async Task<IActionResult> RentNews(RentInforDto rentInforDto)
         {
@@ -128,7 +147,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             var product = await _context.Products
                 .Include(p => p.ProductAddress)
                 .Include(p => p.ProductType)
-                .Include(p=>p.User)
+                .Include(p => p.User)
                 .Where(p => p.Id == rentInforDto.Product.Id)
                 .FirstOrDefaultAsync();
             rentInforDto.Product.ProductAddress = product.ProductAddress;
@@ -167,7 +186,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             return RedirectToAction("Index", "SavedNews");
 
         }
-
+        [Authorize(Roles = "Member")]
         public IActionResult Completed() => View();
 
         private SavedNews CreateSavedList(Product product, User user)

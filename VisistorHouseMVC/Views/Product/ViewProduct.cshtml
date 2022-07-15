@@ -2,7 +2,7 @@
 @using VisistorHouseMVC.Data.Static;
 @model Product
 @{
-    ViewData["Title"] = "Xem tin";
+    ViewData["Title"] = "Chi tiết tin tức";
 }
 <div class="container rounded bg-white my-5">
     <div class="row" style="background-color:#eee">
@@ -93,6 +93,9 @@
                 <div class="action">
                     <a asp-controller="SavedNews"
                        asp-action="AddItemToList" asp-route-id="@Model.Id" class="add-to-cart btn btn-outline-success">Lưu vào danh sách</a>
+                    <a asp-controller="SavedNews" asp-action="RentNews" asp-route-id="@Model.Id" class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove"></span> Thuê
+                    </a>
                 </div>
             </div>
 

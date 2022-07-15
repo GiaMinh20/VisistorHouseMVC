@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ using VisistorHouseMVC.Models;
 
 namespace VisistorHouseMVC.Controllers.Admin
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly StoreContext _context;
@@ -24,7 +25,10 @@ namespace VisistorHouseMVC.Controllers.Admin
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> Index(int pg1 = 1, int pg2 = 1, int pg3 = 1)
+        public async Task<IActionResult> Index(string searchUser, string searchProductOfUser,
+            string sortUser, string sortUserOfProduct, string sortProductCount, string sortProductRented,
+            string productType, string productStatus, string sortPrice,
+            int pg1 = 1, int pg2 = 1, int pg3 = 1)
         {
             var products = await _context.Products.ToListAsync();
             var users = await _context.Users.ToListAsync();
@@ -35,11 +39,42 @@ namespace VisistorHouseMVC.Controllers.Admin
             {
                 var productOfUser = new ProductOfUserDto();
                 productOfUser.UserName = user.UserName;
-                var lisrProductsOfUser = await _context.Products.Where(p => p.User.Id == user.Id).ToListAsync();
-                productOfUser.Products = lisrProductsOfUser;
+                var listProductsOfUser = await _context.Products.Where(p => p.User.Id == user.Id).ToListAsync();
+                productOfUser.ProductCount = listProductsOfUser.Count();
+                foreach (var item in listProductsOfUser)
+                {
+                    if (item.ProductStatus == ProductStatus.Đã_thuê)
+                    {
+                        productOfUser.RentedProducts++;
+                    }
+                }
                 productOfUsers.Add(productOfUser);
             }
             //Paging table User
+            ViewData["searchUser"] = searchUser;
+            if (!String.IsNullOrEmpty(searchUser))
+            {
+                users = users.Where(u => u.UserName.Contains(searchUser)).ToList();
+            }
+
+            ViewData["sortUser"] = sortUser;
+
+            if (!String.IsNullOrEmpty(sortUser))
+            {
+                switch (sortUser)
+                {
+                    case "az":
+                        users = users.OrderBy(x => x.UserName).ToList();
+                        break;
+                    case "za":
+                        users = users.OrderByDescending(x => x.UserName).ToList();
+                        break;
+                    default:
+                        users = users.ToList();
+                        break;
+                }
+            }
+
             const int tableUserSize = 5;
             if (pg1 < 1) pg1 = 1;
             int userCount = users.Count();
@@ -53,6 +88,37 @@ namespace VisistorHouseMVC.Controllers.Admin
             this.ViewBag.UserPager = userPager;
 
             //Paging table Product
+
+            ViewData["productType"] = productType;
+            if (!String.IsNullOrEmpty(productType))
+            {
+                products = products.Where(p => p.ProductType.Name == productType).ToList();
+            }
+
+            ViewData["productStatus"] = productStatus;
+            if (!String.IsNullOrEmpty(productStatus))
+            {
+                products = products.Where(p => p.ProductStatus.ToString() == productStatus).ToList();
+            }
+
+            ViewData["sortPrice"] = sortPrice;
+
+            if (!String.IsNullOrEmpty(sortPrice))
+            {
+                switch (sortPrice)
+                {
+                    case "asc":
+                        products = products.OrderBy(x => x.Price).ToList();
+                        break;
+                    case "desc":
+                        products = products.OrderByDescending(x => x.Price).ToList();
+                        break;
+                    default:
+                        products = products.ToList();
+                        break;
+                }
+            }
+
             const int tableProductSize = 5;
             if (pg2 < 1) pg2 = 1;
             int productCount = products.Count();
@@ -66,6 +132,65 @@ namespace VisistorHouseMVC.Controllers.Admin
             this.ViewBag.ProductPager = productPager;
 
             //Paging table ProductUser
+            ViewData["searchProductOfUser"] = searchProductOfUser;
+            if (!String.IsNullOrEmpty(searchProductOfUser))
+            {
+                productOfUsers = productOfUsers.Where(u => u.UserName.Contains(searchProductOfUser)).ToList();
+            }
+
+            ViewData["sortUserOfProduct"] = sortUserOfProduct;
+
+            if (!String.IsNullOrEmpty(sortUserOfProduct))
+            {
+                switch (sortUserOfProduct)
+                {
+                    case "az":
+                        productOfUsers = productOfUsers.OrderBy(x => x.UserName).ToList();
+                        break;
+                    case "za":
+                        productOfUsers = productOfUsers.OrderByDescending(x => x.UserName).ToList();
+                        break;
+                    default:
+                        productOfUsers = productOfUsers.ToList();
+                        break;
+                }
+            }
+
+            ViewData["sortProductCount"] = sortProductCount;
+
+            if (!String.IsNullOrEmpty(sortProductCount))
+            {
+                switch (sortProductCount)
+                {
+                    case "asc":
+                        productOfUsers = productOfUsers.OrderBy(x => x.ProductCount).ToList();
+                        break;
+                    case "desc":
+                        productOfUsers = productOfUsers.OrderByDescending(x => x.ProductCount).ToList();
+                        break;
+                    default:
+                        productOfUsers = productOfUsers.ToList();
+                        break;
+                }
+            }
+
+            ViewData["sortProductRented"] = sortProductRented;
+
+            if (!String.IsNullOrEmpty(sortProductRented))
+            {
+                switch (sortProductRented)
+                {
+                    case "asc":
+                        productOfUsers = productOfUsers.OrderBy(x => x.RentedProducts).ToList();
+                        break;
+                    case "desc":
+                        productOfUsers = productOfUsers.OrderByDescending(x => x.RentedProducts).ToList();
+                        break;
+                    default:
+                        productOfUsers = productOfUsers.ToList();
+                        break;
+                }
+            }
             const int tableProductUserSize = 5;
             if (pg3 < 1) pg3 = 1;
             int productUserCount = productOfUsers.Count();
@@ -97,6 +222,38 @@ namespace VisistorHouseMVC.Controllers.Admin
             await _userManager.RemoveFromRoleAsync(user, UserRoles.Member.ToUpper());
             await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
+            return RedirectToAction("Index", "Admin");
+        }
+
+        public async Task<IActionResult> CreateProductType(ProductInTypeDto productInTypeDto)
+        {
+            if (productInTypeDto == null || String.IsNullOrWhiteSpace(productInTypeDto.Name))
+            {
+                TempData["FailedCreateProductType"] = "Có lỗi khi thêm danh mục";
+                return RedirectToAction("Index", "Admin");
+            }
+
+            var productType = new ProductType
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = productInTypeDto.Name
+            };
+            foreach (var item in await _context.ProductTypes.ToListAsync())
+            {
+                if (item.Name == productType.Name)
+                {
+                    TempData["FailedCreateProductType"] = "Có lỗi khi thêm danh mục";
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            _context.ProductTypes.Add(productType);
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (!result)
+            {
+                TempData["FailedCreateProductType"] = "Có lỗi khi thêm danh mục";
+                return RedirectToAction("Index", "Admin");
+            }
             return RedirectToAction("Index", "Admin");
         }
     }

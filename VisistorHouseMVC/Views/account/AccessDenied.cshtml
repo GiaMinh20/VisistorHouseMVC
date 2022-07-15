@@ -1,1 +1,16 @@
-﻿<p>Sai quyền</p>
+﻿@{
+    ViewData["Title"] = "Truy cập bị từ chối";
+}
+<div class="jumbotron text-center" style="padding: 16em 0;">
+    <h1 class="display-3">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi</h1>
+    <br>
+    <p class="lead"><h3>Tài khoản của bạn không có quyền truy cập vào trang này</h3></p>
+
+    <hr>
+    <p>
+        Bấm vào nút dưới đây để quay lại trang chủ
+    </p>
+    <p class="lead">
+        <a class="btn btn-primary btn-sm" asp-action="Index" asp-controller="Home" role="button">Trang chủ</a>
+    </p>
+</div>

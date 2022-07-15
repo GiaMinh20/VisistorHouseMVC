@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - VisistorHouseMVC</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://res.cloudinary.com/minh20/image/upload/v1657899415/VisitorHouse/home_uov6do.ico" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/carousel/">
     <link href="~/css/bootstrap.min.css" rel="stylesheet">
@@ -12,18 +13,6 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
-        function chooseFile(fileInput) {
-            if (fileInput.files && fileInput.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#image').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(fileInput.files[0]);
-            }
-        }
-
-    </script>
 </head>
 <body>
     <header>
@@ -43,9 +32,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Liên hệ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Hỗ trợ </a>
                         </li>
                     </ul>
                 </div>
@@ -67,13 +53,17 @@
 
                         @if (userRole[0] == UserRoles.Admin)
                         {
-                            <a class="btn btn-primary mx-1" asp-controller="Admin" asp-action="Index">Admin</a>
+                            <a asp-controller="Admin" asp-action="Index">
+                                <img style="width: 2.5em; height: 2.5em;" class="rounded-circle" src="@user.AvatarUrl" />
+                            </a>
                         }
                         else
                         {
+                            <a asp-controller="Account" asp-action="Profile" asp-route-name="@User.Identity.Name">
+                                <img style="width: 2.5em; height: 2.5em;" class="rounded-circle" src="@user.AvatarUrl" />
+                            </a>
                             <a class="btn btn-primary mx-1" asp-controller="SavedNews" asp-action="Index" asp-route-name="@User.Identity.Name">Danh sách lưu</a>
                             <a class="btn btn-primary mx-1" asp-controller="Product" asp-action="CreateProduct">Đăng tin</a>
-                            <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="Profile" asp-route-name="@User.Identity.Name">Cá nhân</a>
                         }
                         <a class="btn btn-primary mx-1" asp-controller="Account" asp-action="SignOutUser">Đăng xuất</a>
 

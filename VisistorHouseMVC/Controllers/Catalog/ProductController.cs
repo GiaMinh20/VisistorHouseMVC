@@ -138,7 +138,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
         }
 
         //Edit Product Page
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public IActionResult EditProduct(string id)
         {
             var product = _context.Products
@@ -151,7 +151,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
             return View(editProductDto);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         [HttpPost]
         public async Task<IActionResult> EditProduct(EditProductDto editProductDto)
         {
@@ -203,6 +203,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
 
         }
 
+        [Authorize(Roles = "Member")]
         public async Task<ActionResult> DeleteProduct(string id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
@@ -218,6 +219,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
             }
             return RedirectToAction("Profile", "Account", new {name=User.Identity.Name});
         }
+
         public IActionResult ViewProduct(string id)
         {
             var product = _context.Products

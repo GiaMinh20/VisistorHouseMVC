@@ -119,6 +119,24 @@ namespace VisistorHouseMVC
 
             app.UseEndpoints(endpoints =>
             {
+                //Admin Controller
+                endpoints.MapControllerRoute(
+                     name: "admin",
+                     defaults: new { controller = "Admin", action = "Index" },
+                     pattern: "admin");
+                //SavedNews Controller
+                endpoints.MapControllerRoute(
+                     name: "savednews",
+                     defaults: new { controller = "SavedNews", action = "Index" },
+                     pattern: "savednews");
+                endpoints.MapControllerRoute(
+                     name: "rentnews/{id?}",
+                     defaults: new { controller = "SavedNews", action = "RentNews" },
+                     pattern: "rentnews/{id?}");
+                endpoints.MapControllerRoute(
+                     name: "rentnews-success",
+                     defaults: new { controller = "SavedNews", action = "Completed" },
+                     pattern: "rentnews-success");
                 //Product Controller
                 endpoints.MapControllerRoute(
                      name: "view-product/{id?}",

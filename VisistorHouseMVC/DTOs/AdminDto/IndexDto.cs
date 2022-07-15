@@ -9,5 +9,6 @@ namespace VisistorHouseMVC.DTOs.AdminDto
         public List<Product> Products { get; set; }
         public List<ProductType> ProductTypes { get; set; }
         public List<ProductOfUserDto> ProductOfUserDtos { get; set; }
+        public ProductInTypeDto ProductInTypeDto { get; set; }
     }
 }

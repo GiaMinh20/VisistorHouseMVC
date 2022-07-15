@@ -94,7 +94,7 @@ namespace VisistorHouseMVC.Controllers.Account
                 TempData["Error"] = "Số điện thoại đã được dùng";
                 return View(signUpDto);
             }
-            if(signUpDto.Password != signUpDto.ConfirmPassword)
+            if (signUpDto.Password != signUpDto.ConfirmPassword)
             {
                 TempData["Error"] = "Nhập lại mật khẩu không đúng";
                 return View(signUpDto);
@@ -123,6 +123,7 @@ namespace VisistorHouseMVC.Controllers.Account
 
                 //generation of the email token
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+
                 var link = Url.Action(nameof(VerifyEmail), "Account", new { userId = newUser.Id, token }, Request.Scheme, Request.Host.ToString());
 
                 await _emailService.SendEmailAsync(newUser.Email, "Verify Email", $"<html><body><p>Hi {newUser.UserName},</p><p>Please click here to verify your email:</p><a href=\"{link}\"><strong>Verify Email</strong></a></body></html>");
@@ -149,12 +150,69 @@ namespace VisistorHouseMVC.Controllers.Account
 
             return BadRequest();
         }
-
         public IActionResult AccessDenied(string ReturnUrl)
         {
             return View();
         }
 
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto forgotPasswordDto)
+        {
+            var user = await _userManager.FindByEmailAsync(forgotPasswordDto.Email);
+            if (user == null)
+            {
+                TempData["NotFoundEmail"] = "Không tìm thấy tài khoản với Email";
+                return RedirectToAction("ForgotPassword", "Account");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var link = Url.Action("ResetPassword", "Account", new { email=forgotPasswordDto.Email, token }, Request.Scheme, Request.Host.ToString());
+            await _emailService.SendEmailAsync(user.Email, "Reset password", $"<html><body><p>Hi {user.UserName},</p><p>Please click here to redirect to reset password page:</p><a href=\"{link}\"><strong>Click here</strong></a></body></html>");
+
+            TempData["SendEmail"] = "Đã gửi xác nhận đến Email của bạn. Hãy kiểm tra Email";
+            return View();
+        }
+
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                ModelState.AddModelError("", "Invalid password reset token");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Find the user by email
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return View("ResetPasswordConfirmation");
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(model);
+                }
+
+                return View("ResetPasswordConfirmation");
+            }
+            return View(model);
+        }
 
         //Account Information Page
         [Authorize(Roles = "Member")]
@@ -169,7 +227,7 @@ namespace VisistorHouseMVC.Controllers.Account
                 .Include(p => p.ProductAddress)
                 .Include(p => p.ProductType)
                 .Include(p => p.User)
-                .Where(p=>p.User.Id == user.Id)
+                .Where(p => p.User.Id == user.Id)
                 .ToListAsync();
             ProfileDto profile = new ProfileDto
             {
@@ -205,7 +263,7 @@ namespace VisistorHouseMVC.Controllers.Account
             else { return RedirectToAction("SignIn", "Account"); }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileDto editProfileDto)
         {
@@ -229,10 +287,10 @@ namespace VisistorHouseMVC.Controllers.Account
                     user.PublicId = imageResult.PublicId;
 
                 }
-                
+
                 user.FullName = editProfileDto.FullName;
                 user.Gender = editProfileDto.Gender;
-                user.Dob=editProfileDto.Dob;
+                user.Dob = editProfileDto.Dob;
                 user.UserAddress = new UserAddress
                 {
                     Street = editProfileDto.Address.Street,
@@ -247,7 +305,7 @@ namespace VisistorHouseMVC.Controllers.Account
                 if (result) return RedirectToAction("Profile", "Account");
 
                 return BadRequest(new ProblemDetails { Title = "Đã xảy ra lỗi khi chỉnh sửa thông tin" });
-                
+
             }
             return RedirectToAction("Profile", "Account");
         }

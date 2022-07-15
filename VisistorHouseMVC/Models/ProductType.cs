@@ -1,4 +1,6 @@
-﻿namespace VisistorHouseMVC.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace VisistorHouseMVC.Models
 {
     public class ProductType
     {

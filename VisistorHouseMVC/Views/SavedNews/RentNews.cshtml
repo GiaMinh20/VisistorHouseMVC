@@ -51,37 +51,37 @@
                     </div>
                     <div class="row">
                         <input asp-for="Product.Id" type="hidden" readonly />
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <h6>Tiêu đề:</h6>
                         </div>
-                        <div class="col-md-8">
-                            <input asp-for="Product.Name" type="text" readonly value="@Model.Product.Name" />
+                        <div class="col-md-9">
+                            <input asp-for="Product.Name" type="text" readonly value="@Model.Product.Name" class="form-control"/>
                         </div>
                     </div>
-                    <div class="row ">
-                        <div class="col-md-4">
+                    <div class="row pt-1">
+                        <div class="col-md-3">
                             <h6>Giá:</h6>
                         </div>
-                        <div class="col-md-8">
-                            <input asp-for="Product.Price" type="text" readonly value="@Model.Product.Price VNĐ" />
+                        <div class="col-md-9">
+                            <input asp-for="Product.Price" type="text" readonly value="@Model.Product.Price VNĐ" class="form-control"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="row pt-1">
+                        <div class="col-md-3">
                             <h6>Địa chỉ:</h6>
                         </div>
-                        <div class="col-md-8">
-                            <input type="text" readonly value="@Model.Product.ProductAddress.SumAddress()" />
+                        <div class="col-md-9">
+                            <input type="text" readonly value="@Model.Product.ProductAddress.SumAddress()" class="form-control" />
                         </div>
                     </div>
-                    <div class="row ">
-                        <div class="col-md-4">
+                    <div class="row pt-1">
+                        <div class="col-md-3">
                             <h6>Liên hệ:</h6>
                         </div>
-                        <div class="col-md-8">
-                            <input asp-for="Product.User.FullName" type="text" readonly value="@Model.User.FullName" />
-                            <input asp-for="Product.User.Email" type="text" readonly value="@Model.User.Email" />
-                            <input asp-for="Product.User.PhoneNumber" type="text" readonly value="@Model.User.PhoneNumber" />
+                        <div class="col-md-9">
+                            <input  type="text" readonly value="@Model.Product.User.FullName" class="form-control " />
+                            <input type="text" readonly value="@Model.Product.User.Email" class="form-control mt-1" />
+                            <input  type="text" readonly value="@Model.Product.User.PhoneNumber" class="form-control mt-1" />
                         </div>
                     </div>
                 </div>
