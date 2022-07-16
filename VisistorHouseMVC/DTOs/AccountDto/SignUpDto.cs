@@ -5,13 +5,13 @@ namespace VisistorHouseMVC.DTOs.AccountDto
 {
     public class SignUpDto
     {
-        [Required(ErrorMessage = "User name is required")]
+        [Required(ErrorMessage = "Tên đăng nhập là bắt buộc")]
         public string Username { get; set; }
 
-        [Required(ErrorMessage = "Email address is required")]
+        [Required(ErrorMessage = "Email là bắt buộc")]
         public string EmailAddress { get; set; }
 
-        [Required(ErrorMessage = "Phone number is required")]
+        [Required(ErrorMessage = "Số điện thoạt là bắt buộc")]
         public string Phone { get; set; }
 
         [Display(Name = "Avatar")]
@@ -21,9 +21,9 @@ namespace VisistorHouseMVC.DTOs.AccountDto
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Confirm password is required")]
+        [Required(ErrorMessage = "Xác nhận mật khẩu là bắt buộc")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
+        [Compare("Password", ErrorMessage = "Không trùng với mật khẩu đã nhập")]
         public string ConfirmPassword { get; set; }
     }
 }

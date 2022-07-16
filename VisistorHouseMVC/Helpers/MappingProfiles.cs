@@ -8,9 +8,6 @@ namespace VisistorHouseMVC.Helpers
     {
         public MappingProfiles()
         {
-            //AccountController
-            //CreateMap<EditUserDto, User>();
-
             //ProductController
             CreateMap<CreateProductDto, Product>();
             CreateMap<EditProductDto, Product>();
