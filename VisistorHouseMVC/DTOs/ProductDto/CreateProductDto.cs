@@ -14,7 +14,6 @@ namespace VisistorHouseMVC.DTOs.ProductDto
         public string Description { get; set; }
         [Required]
         public long Price { get; set; }
-        [Required]
         public IFormFileCollection Files { get; set; }
         [Required]
         public string Type { get; set; }

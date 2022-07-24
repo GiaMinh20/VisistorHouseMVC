@@ -4,7 +4,7 @@ using VisistorHouseMVC.Models;
 
 namespace VisistorHouseMVC.Data
 {
-    public class StoreContext :IdentityDbContext<User>
+    public class StoreContext : IdentityDbContext<User>
     {
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
@@ -14,6 +14,8 @@ namespace VisistorHouseMVC.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<SavedNews> SavedNews { get; set; }
+        public DbSet<Order> Orders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
