@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VisistorHouseMVC.Data;
 
-namespace VisistorHouseMVC.Data.Migrations
+namespace VisistorHouseMVC.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20220707023938_4")]
-    partial class _4
+    [Migration("20220830132313_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -165,6 +165,40 @@ namespace VisistorHouseMVC.Data.Migrations
                     b.HasIndex("SavedNewsId");
 
                     b.ToTable("ProductSavedNews");
+                });
+
+            modelBuilder.Entity("VisistorHouseMVC.Models.Order", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RenterId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ShippingAddressId")
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShippingAddressId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("VisistorHouseMVC.Models.Product", b =>
@@ -421,6 +455,21 @@ namespace VisistorHouseMVC.Data.Migrations
                         .HasForeignKey("SavedNewsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("VisistorHouseMVC.Models.Order", b =>
+                {
+                    b.HasOne("VisistorHouseMVC.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("VisistorHouseMVC.Models.UserAddress", "ShippingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("VisistorHouseMVC.Models.Product", b =>

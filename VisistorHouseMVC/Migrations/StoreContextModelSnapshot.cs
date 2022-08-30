@@ -3,18 +3,16 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using VisistorHouseMVC.Data;
 
-namespace VisistorHouseMVC.Data.Migrations
+namespace VisistorHouseMVC.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20220629172019_init")]
-    partial class init
+    partial class StoreContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,6 +165,40 @@ namespace VisistorHouseMVC.Data.Migrations
                     b.ToTable("ProductSavedNews");
                 });
 
+            modelBuilder.Entity("VisistorHouseMVC.Models.Order", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RenterId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ShippingAddressId")
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShippingAddressId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("VisistorHouseMVC.Models.Product", b =>
                 {
                     b.Property<string>("Id")
@@ -277,6 +309,9 @@ namespace VisistorHouseMVC.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("text");
 
                     b.Property<string>("Gender")
                         .HasColumnType("text");
@@ -418,6 +453,21 @@ namespace VisistorHouseMVC.Data.Migrations
                         .HasForeignKey("SavedNewsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("VisistorHouseMVC.Models.Order", b =>
+                {
+                    b.HasOne("VisistorHouseMVC.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("VisistorHouseMVC.Models.UserAddress", "ShippingAddress")
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ShippingAddress");
                 });
 
             modelBuilder.Entity("VisistorHouseMVC.Models.Product", b =>
