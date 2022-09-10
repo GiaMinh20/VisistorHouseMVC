@@ -302,12 +302,12 @@ namespace VisistorHouseMVC.Controllers.Account
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (result) return RedirectToAction("Profile", "Account");
+                if (result) return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
 
                 return BadRequest(new ProblemDetails { Title = "Đã xảy ra lỗi khi chỉnh sửa thông tin" });
 
             }
-            return RedirectToAction("Profile", "Account");
+            return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
         }
 
         //Sign Out

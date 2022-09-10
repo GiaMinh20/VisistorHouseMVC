@@ -132,7 +132,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return RedirectToAction("Profile", "Account");
+            if (result) return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
 
             return BadRequest(new ProblemDetails { Title = "Xảy ra lỗi khi đăng bài viết" });
         }
@@ -217,7 +217,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
                 return RedirectToAction("EditProduct", "Product");
 
             }
-            return RedirectToAction("Profile", "Account", new {name=User.Identity.Name});
+            return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
         }
 
         public IActionResult ViewProduct(string id)
