@@ -8,7 +8,6 @@ namespace VisistorHouseMVC.Data
     {
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
-
         }
 
         public DbSet<Product> Products { get; set; }
@@ -28,7 +27,6 @@ namespace VisistorHouseMVC.Data
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
-
         }
     }
 }

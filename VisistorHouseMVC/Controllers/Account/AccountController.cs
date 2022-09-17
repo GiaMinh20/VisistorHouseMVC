@@ -69,7 +69,6 @@ namespace VisistorHouseMVC.Controllers.Account
             return View(signInDto);
         }
 
-
         //Sign Up Page
         public IActionResult SignUp() => View(new SignUpDto());
 
@@ -130,7 +129,6 @@ namespace VisistorHouseMVC.Controllers.Account
 
                 TempData["CheckMail"] = "Hãy xác nhận email trước khi đăng nhập";
                 return RedirectToAction("SignIn", "Account");
-
             }
             return View();
         }
@@ -150,6 +148,7 @@ namespace VisistorHouseMVC.Controllers.Account
 
             return BadRequest();
         }
+
         public IActionResult AccessDenied(string ReturnUrl)
         {
             return View();
@@ -170,7 +169,7 @@ namespace VisistorHouseMVC.Controllers.Account
                 return RedirectToAction("ForgotPassword", "Account");
             }
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var link = Url.Action("ResetPassword", "Account", new { email=forgotPasswordDto.Email, token }, Request.Scheme, Request.Host.ToString());
+            var link = Url.Action("ResetPassword", "Account", new { email = forgotPasswordDto.Email, token }, Request.Scheme, Request.Host.ToString());
             await _emailService.SendEmailAsync(user.Email, "Reset password", $"<html><body><p>Hi {user.UserName},</p><p>Please click here to redirect to reset password page:</p><a href=\"{link}\"><strong>Click here</strong></a></body></html>");
 
             TempData["SendEmail"] = "Đã gửi xác nhận đến Email của bạn. Hãy kiểm tra Email";
@@ -285,7 +284,6 @@ namespace VisistorHouseMVC.Controllers.Account
 
                     user.AvatarUrl = imageResult.SecureUrl.ToString();
                     user.PublicId = imageResult.PublicId;
-
                 }
 
                 user.FullName = editProfileDto.FullName;
@@ -305,7 +303,6 @@ namespace VisistorHouseMVC.Controllers.Account
                 if (result) return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
 
                 return BadRequest(new ProblemDetails { Title = "Đã xảy ra lỗi khi chỉnh sửa thông tin" });
-
             }
             return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
         }

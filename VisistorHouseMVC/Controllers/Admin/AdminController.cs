@@ -19,12 +19,14 @@ namespace VisistorHouseMVC.Controllers.Admin
     {
         private readonly StoreContext _context;
         private readonly UserManager<User> _userManager;
+
         public AdminController(StoreContext context,
             UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
+
         public async Task<IActionResult> Index(string searchUser, string searchProductOfUser,
             string sortUser, string sortUserOfProduct, string sortProductCount, string sortProductRented,
             string productType, string productStatus, string sortPrice,
@@ -66,9 +68,11 @@ namespace VisistorHouseMVC.Controllers.Admin
                     case "az":
                         users = users.OrderBy(x => x.UserName).ToList();
                         break;
+
                     case "za":
                         users = users.OrderByDescending(x => x.UserName).ToList();
                         break;
+
                     default:
                         users = users.ToList();
                         break;
@@ -110,9 +114,11 @@ namespace VisistorHouseMVC.Controllers.Admin
                     case "asc":
                         products = products.OrderBy(x => x.Price).ToList();
                         break;
+
                     case "desc":
                         products = products.OrderByDescending(x => x.Price).ToList();
                         break;
+
                     default:
                         products = products.ToList();
                         break;
@@ -147,9 +153,11 @@ namespace VisistorHouseMVC.Controllers.Admin
                     case "az":
                         productOfUsers = productOfUsers.OrderBy(x => x.UserName).ToList();
                         break;
+
                     case "za":
                         productOfUsers = productOfUsers.OrderByDescending(x => x.UserName).ToList();
                         break;
+
                     default:
                         productOfUsers = productOfUsers.ToList();
                         break;
@@ -165,9 +173,11 @@ namespace VisistorHouseMVC.Controllers.Admin
                     case "asc":
                         productOfUsers = productOfUsers.OrderBy(x => x.ProductCount).ToList();
                         break;
+
                     case "desc":
                         productOfUsers = productOfUsers.OrderByDescending(x => x.ProductCount).ToList();
                         break;
+
                     default:
                         productOfUsers = productOfUsers.ToList();
                         break;
@@ -183,9 +193,11 @@ namespace VisistorHouseMVC.Controllers.Admin
                     case "asc":
                         productOfUsers = productOfUsers.OrderBy(x => x.RentedProducts).ToList();
                         break;
+
                     case "desc":
                         productOfUsers = productOfUsers.OrderByDescending(x => x.RentedProducts).ToList();
                         break;
+
                     default:
                         productOfUsers = productOfUsers.ToList();
                         break;

@@ -7,6 +7,7 @@ namespace VisistorHouseMVC.Models
     {
         [ForeignKey("User")]
         public string Id { get; set; }
+
         public List<Product> Products { get; set; }
         public virtual User User { get; set; }
     }

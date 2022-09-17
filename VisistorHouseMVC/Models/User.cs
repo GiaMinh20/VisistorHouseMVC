@@ -2,7 +2,7 @@
 
 namespace VisistorHouseMVC.Models
 {
-    public class User:IdentityUser
+    public class User : IdentityUser
     {
         public string FullName { get; set; }
         public string AvatarUrl { get; set; }

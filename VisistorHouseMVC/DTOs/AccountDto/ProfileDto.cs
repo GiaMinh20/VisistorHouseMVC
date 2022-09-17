@@ -7,6 +7,7 @@ namespace VisistorHouseMVC.DTOs.AccountDto
     {
         public User User { get; set; }
         public List<Product> Products { get; set; }
+
         public string Address()
         {
             if (User.UserAddress == null)
@@ -17,6 +18,5 @@ namespace VisistorHouseMVC.DTOs.AccountDto
                 User.UserAddress.District + " " +
                 User.UserAddress.City;
         }
-
     }
 }

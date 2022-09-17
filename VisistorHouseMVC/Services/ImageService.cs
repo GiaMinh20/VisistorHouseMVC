@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+
 namespace VisistorHouseMVC.Services
 {
     public class ImageService
     {
         private readonly Cloudinary _cloudinary;
+
         public ImageService(IConfiguration config)
         {
             var acc = new Account

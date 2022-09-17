@@ -10,7 +10,7 @@ namespace VisistorHouseMVC.DTOs.AccountDto
         public string FullName { get; set; }
         public string Gender { get; set; }
         public string Dob { get; set; }
-        public Address  Address { get; set; }
+        public Address Address { get; set; }
         public IFormFile Avatar { get; set; }
         public string AvatarUrl { get; set; }
         public string PhoneNumber { get; set; }

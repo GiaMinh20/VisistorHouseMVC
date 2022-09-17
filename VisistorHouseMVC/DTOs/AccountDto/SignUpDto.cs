@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using VisistorHouseMVC.Models;
 
 namespace VisistorHouseMVC.DTOs.AccountDto
 {

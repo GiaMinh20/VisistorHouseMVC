@@ -17,6 +17,5 @@ namespace VisistorHouseMVC.DTOs.ProductDto
         public IFormFileCollection Files { get; set; }
         public Address ProductAddress { get; set; }
         public List<string> ProductImages { get; set; }
-
     }
 }

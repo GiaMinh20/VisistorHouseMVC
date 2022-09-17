@@ -12,6 +12,5 @@ namespace VisistorHouseMVC.Models
         public OrderStatus OrderStatus { get; set; }
         public Product Product { get; set; }
         public string PaymentIntentId { get; set; }
-
     }
 }

@@ -2,9 +2,6 @@
 using Mailjet.Client.Resources;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace VisistorHouseMVC.Services
@@ -14,6 +11,7 @@ namespace VisistorHouseMVC.Services
         public string ApiKey { get; set; }
         public string SecretKey { get; set; }
     }
+
     public class EmailService
     {
         private readonly IConfiguration _configuration;

@@ -37,9 +37,8 @@ namespace VisistorHouseMVC.Data
                     {
                         UserName = "Admin",
                         Email = adminEmail,
-                        AvatarUrl= "https://res.cloudinary.com/minh20/image/upload/v1656074408/VisitorHouse/default_avatar_m5uoke.png",
+                        AvatarUrl = "https://res.cloudinary.com/minh20/image/upload/v1656074408/VisitorHouse/default_avatar_m5uoke.png",
                         EmailConfirmed = true
-
                     };
                     await userManager.CreateAsync(newAdminUser, "Admin@123");
                     await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);

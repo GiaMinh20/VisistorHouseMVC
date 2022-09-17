@@ -91,7 +91,6 @@ namespace VisistorHouseMVC
             });
             services.AddScoped<EmailService>();
             services.AddScoped<ImageService>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -104,7 +103,6 @@ namespace VisistorHouseMVC
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -118,7 +116,6 @@ namespace VisistorHouseMVC
             app.UseAuthorization();
 
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
@@ -176,10 +173,7 @@ namespace VisistorHouseMVC
                      defaults: new { controller = "Account", action = "SignUp" },
                      pattern: "signup");
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+                endpoints.MapControllerRoute("Default", "{controller=Home}/{action=Index}/{id?}");
             });
             InitData.SeedUsersAndRolesAsync(app).Wait();
         }

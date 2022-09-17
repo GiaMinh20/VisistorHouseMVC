@@ -24,6 +24,7 @@ namespace VisistorHouseMVC.Controllers.Saved
             _context = store;
             _emailService = emailService;
         }
+
         [Authorize(Roles = "Member")]
         public async Task<IActionResult> Index()
         {
@@ -66,7 +67,6 @@ namespace VisistorHouseMVC.Controllers.Saved
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) return BadRequest(new ProblemDetails { Title = "Không tìm thấy tin" });
 
-
             var savedList = await _context.SavedNews
                 .Include(s => s.User)
                 .Include(s => s.Products)
@@ -84,7 +84,6 @@ namespace VisistorHouseMVC.Controllers.Saved
             {
                 TempData["ErrorSave"] = "Đã xảy ra lỗi khi vào lưu danh sách hoặc tin tức đã tồn tại trong danh sách";
                 return RedirectToAction("Index", "SavedNews");
-
             }
             return RedirectToAction("Index", "SavedNews");
         }
@@ -112,7 +111,6 @@ namespace VisistorHouseMVC.Controllers.Saved
             {
                 TempData["ErrorSave"] = "Đã xảy ra lỗi khi xóa tin tức ";
                 return RedirectToAction("Index", "SavedNews");
-
             }
             return RedirectToAction("Index", "SavedNews");
         }
@@ -158,10 +156,10 @@ namespace VisistorHouseMVC.Controllers.Saved
 
             if (result)
             {
-                await _emailService.SendEmailAsync(rentInforDto.Product.User.Email,
+                await _emailService.SendEmailAsync(product.User.Email,
                 "Tin đã được thuê", $"<html><body>" +
-                $"<p>Chào {rentInforDto.Product.User.FullName},</p>" +
-                $"<p>Tin <strong>{rentInforDto.Product.Name}</strong> của bạn đã được xác nhận thuê bởi <strong>{rentInforDto.User.FullName}</strong></p>" +
+                $"<p>Chào {product.User.FullName},</p>" +
+                $"<p>Tin <strong>{product.Name}</strong> của bạn đã được xác nhận thuê bởi <strong>{rentInforDto.User.FullName}</strong></p>" +
                 "<p>Thông tin liên lạc với người thuê:</p>" +
                 $"<p>Email: {rentInforDto.User.Email} </p>" +
                 $"<p>Số điện thoại: {rentInforDto.User.PhoneNumber} </p>" +
@@ -174,9 +172,9 @@ namespace VisistorHouseMVC.Controllers.Saved
                 "<p>Bạn đã thuê tin tức có thông tin như sau:</p>" +
                 $"<p>Tiêu đề: {rentInforDto.Product.Name} </p>" +
                 $"<p>Địa chỉ: {rentInforDto.Product.ProductAddress.SumAddress()} </p>" +
-                $"<p>Người đăng tin: {rentInforDto.Product.User.FullName} </p>" +
-                $"<p>Email: {rentInforDto.Product.User.Email} </p>" +
-                $"<p>Số điện thoại:{rentInforDto.Product.User.PhoneNumber} </p>" +
+                $"<p>Người đăng tin: {rentInforDto.User.FullName} </p>" +
+                $"<p>Email: {rentInforDto.User.Email} </p>" +
+                $"<p>Số điện thoại:{rentInforDto.User.PhoneNumber} </p>" +
                 "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi," +
                 "<p><i>VisistorHouseMVC</i></p>" +
                 $"</body></html>");
@@ -184,14 +182,13 @@ namespace VisistorHouseMVC.Controllers.Saved
                 return RedirectToAction("Completed", "SavedNews");
             }
             return RedirectToAction("Index", "SavedNews");
-
         }
+
         [Authorize(Roles = "Member")]
         public IActionResult Completed() => View();
 
         private SavedNews CreateSavedList(Product product, User user)
         {
-
             var products = new List<Product>();
             products.Add(product);
             var savedList = new SavedNews

@@ -12,7 +12,9 @@ namespace VisistorHouseMVC.Helpers
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
 
-        public Pager() { }
+        public Pager()
+        { }
+
         public Pager(int totalItems, int page, int pageSize = 10)
         {
             int totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
@@ -21,15 +23,15 @@ namespace VisistorHouseMVC.Helpers
             int startPage = currentPage - 5;
             int endPage = currentPage + 4;
 
-            if(startPage <= 0)
+            if (startPage <= 0)
             {
                 endPage = endPage - (startPage - 1);
                 startPage = 1;
             }
-            if(endPage > totalPages)
+            if (endPage > totalPages)
             {
                 endPage = totalPages;
-                if(endPage > 10)
+                if (endPage > 10)
                 {
                     startPage = endPage - 9;
                 }
@@ -41,7 +43,6 @@ namespace VisistorHouseMVC.Helpers
             TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;
-
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace VisistorHouseMVC.Models
 {
     public class ErrorViewModel

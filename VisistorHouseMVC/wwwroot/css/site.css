@@ -1,6 +1,7 @@
-﻿a{
-    text-decoration:none;
+﻿a {
+    text-decoration: none;
 }
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -41,16 +42,16 @@
     overflow-y: hidden;
 }
 
-.nav-scroller .nav {
-    display: flex;
-    flex-wrap: nowrap;
-    padding-bottom: 1rem;
-    margin-top: -1px;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-}
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
 
 /*Start Sign In Page*/
 .divider:after,
@@ -61,4 +62,3 @@
     background: #eee;
 }
 /*End Sign In Page*/
-

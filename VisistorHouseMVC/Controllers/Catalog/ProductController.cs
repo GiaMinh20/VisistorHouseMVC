@@ -20,6 +20,7 @@ namespace VisistorHouseMVC.Controllers.Catalog
         private readonly StoreContext _context;
         private readonly ImageService _imageService;
         private readonly IMapper _mapper;
+
         public ProductController(StoreContext context,
             ImageService imageService,
             IMapper mapper)
@@ -48,15 +49,19 @@ namespace VisistorHouseMVC.Controllers.Catalog
                     case "az":
                         products = products.OrderBy(x => x.Name).ToList();
                         break;
+
                     case "za":
                         products = products.OrderByDescending(x => x.Name).ToList();
                         break;
+
                     case "highest":
                         products = products.OrderByDescending(x => x.Price).ToList();
                         break;
+
                     case "lowest":
                         products = products.OrderBy(x => x.Price).ToList();
                         break;
+
                     default:
                         products = products.ToList();
                         break;
@@ -92,7 +97,6 @@ namespace VisistorHouseMVC.Controllers.Catalog
 
             return View(data);
         }
-
 
         //Create Product Page
         [Authorize(Roles = "Member")]
@@ -197,10 +201,8 @@ namespace VisistorHouseMVC.Controllers.Catalog
             {
                 TempData["ErrorEdit"] = "Đã xảy ra lỗi khi chỉnh sửa sản phẩm";
                 return RedirectToAction("EditProduct", "Product");
-
             }
             return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
-
         }
 
         [Authorize(Roles = "Member")]
@@ -215,7 +217,6 @@ namespace VisistorHouseMVC.Controllers.Catalog
             {
                 TempData["ErrorDeleteProduct"] = "Đã xảy ra lỗi xóa tin";
                 return RedirectToAction("EditProduct", "Product");
-
             }
             return RedirectToAction("Profile", "Account", new { name = User.Identity.Name });
         }
